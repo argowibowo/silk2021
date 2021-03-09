@@ -8,6 +8,41 @@ use Slim\Http\UploadedFile;
 return function (App $app) {
 $container = $app->getContainer();
 
+//----------------------------------------SILK-------------------------------------------
+$app->post("/pasien/", function (Request $request, Response $response){
+
+    $pasien = $request->getParsedBody();
+
+    $sql = "INSERT INTO pasien (nik,nama_lengkap,tgl_lahir,jns_kelamin,
+            alamat,kelurahan,kabupaten,provinsi,warga_negara,status_nikah,no_telp,tgl_daftar) 
+            VALUE (:nik,:nama_lengkap,:tgl_lahir,:jns_kelamin,
+            :alamat,:kelurahan,:kabupaten,:provinsi,:warga_negara,:status_nikah,:no_telp,:tgl_daftar)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":nik" => $pasien["nik"],
+        ":nama_lengkap" => $pasien["nama_lengkap"],
+        ":tgl_lahir" => $pasien["tgl_lahir"],
+        ":jns_kelamin" => $pasien["jns_kelamin"],
+        ":alamat" => $pasien["alamat"],
+        ":kelurahan" => $pasien["kelurahan"],
+        ":kabupaten" => $pasien["kabupaten"],
+        ":provinsi" => $pasien["provinsi"],
+        ":warga_negara" => $pasien["warga_negara"],
+        ":status_nikah" => $pasien["status_nikah"],
+        ":no_telp" => $pasien["no_telp"],
+        ":tgl_daftar" => date("Y-m-d"),
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1", "no_rm" => $this->db->lastInsertId()], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+
+//-----------------------------------------END SILK---------------------------------------------
+
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) use ($container) {
     // Sample log message
     $container->get('logger')->info("Slim-Skeleton '/' route");
