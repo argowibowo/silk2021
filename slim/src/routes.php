@@ -61,7 +61,7 @@ $app->get("/rekammds/", function (Request $request, Response $response){
 // GET by id
 $app->get("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
-    $sql = "SELECT * FROM petugas where no_rm=:no_rm";
+    $sql = "SELECT * FROM rekammds where no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
     $data = [
         ":no_rm" => $id
@@ -74,10 +74,11 @@ $app->get("/rekammds/{id}", function (Request $request, Response $response, $arg
 $app->put("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $rekammds = $request->getParsedBody();
-    $sql = "UPDATE rekammds SET nama=:nama keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, id_unit=:id_unit, tgl_periksa=:tgl_periksa, id_resep=:id_resep
-     WHERE no_rm=:no_rm";
+    $sql = "UPDATE rekammds SET nama=:nama, keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, 
+    id_unit=:id_unit, tgl_periksa=:tgl_periksa, id_resep=:id_resep
+    WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
-    
+
     $data = [
         ":no_rm" => $id,
         ":nama" => $rekammds["nama"],
@@ -90,10 +91,11 @@ $app->put("/rekammds/{id}", function (Request $request, Response $response, $arg
     ];
 
     if($stmt->execute($data))
-        return $response->withJson(["status" => "success", "data" => "1"], 200);
+        return $response->withJson(["rekammds updated succesfully"], 200);
 
-        return $response->withJson(["status" => "failed", "data" => "0"], 200);
-}); 
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
 
 $app->delete("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
