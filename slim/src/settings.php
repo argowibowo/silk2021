@@ -21,7 +21,7 @@ return [
             'host' => 'localhost',
             'user' => 'root',
             'pass' => '',
-            'dbname' => 'tokobuah',
+            'dbname' => 'silk2021',
             'driver' => 'mysql'
         ]
     ],
