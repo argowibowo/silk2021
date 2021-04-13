@@ -8,6 +8,8 @@ use Slim\Http\UploadedFile;
 return function (App $app) {
 $container = $app->getContainer();
 
+//----------------------------------------SILK-------------------------------------------
+
 $app->post("/rekammds/", function (Request $request, Response $response){
 
     $rekammds = $request->getParsedBody();
@@ -34,6 +36,9 @@ $app->post("/rekammds/", function (Request $request, Response $response){
 });
 
 
+
+//-----------------------------------------END SILK---------------------------------------------
+
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) use ($container) {
     // Sample log message
     $container->get('logger')->info("Slim-Skeleton '/' route");
@@ -50,38 +55,44 @@ $app->get('/about/', function (Request $request, Response $response, array $args
     echo "ini adalah halaman about!";
     
 });
+
 $app->get("/rekammds/", function (Request $request, Response $response){
     $sql = "SELECT * FROM rekammds";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     $result = $stmt->fetchAll();
-    return $response->withJson($result, 200);
+    return $response->withJson(["status" => "success", "data" => $result], 200);
 });
 
-// GET by id
 $app->get("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
-    $sql = "SELECT * FROM rekammds where no_rm=:no_rm";
+    $sql = "SELECT * FROM rekammds WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
-    $data = [
-        ":no_rm" => $id
-    ];
-    $stmt->execute($data);
-    $result = $stmt->fetchAll();
-    return $response->withJson($result, 200);
+    $stmt->execute([":no_rm" => $no_rm]);
+    $result = $stmt->fetch();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
 });
+
+$app->get("rekammds/search/", function (Request $request, Response $response, $args){
+    $keyword = $request->getQueryParam("keyword");
+    $sql = "SELECT * FROM rekammds WHERE name LIKE '%$keyword%'";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
+});
+
 
 $app->put("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $rekammds = $request->getParsedBody();
-    $sql = "UPDATE rekammds SET nama=:nama, keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, 
+    $sql = "UPDATE rekammds SET  keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, 
     id_unit=:id_unit, tgl_periksa=:tgl_periksa, id_resep=:id_resep
     WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
 
     $data = [
         ":no_rm" => $id,
-        ":nama" => $rekammds["nama"],
         ":keluhan" => $rekammds["keluhan"],
         ":id_dokter" => $rekammds["id_dokter"],
         ":diagnosa" => $rekammds["diagnosa"],
@@ -95,8 +106,6 @@ $app->put("/rekammds/{id}", function (Request $request, Response $response, $arg
 
     return $response->withJson(["status" => "failed", "data" => "0"], 200);
 });
-
-
 $app->delete("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $sql = "DELETE FROM rekammds WHERE no_rm=:no_rm";
