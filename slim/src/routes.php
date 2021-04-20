@@ -294,4 +294,265 @@ $app->delete("/rekammds/{id}", function (Request $request, Response $response, $
     return $response->withJson(["status" => "failed", "data" => "0"], 200);
 });
 
+//-----------------------------------------------obat dan resep----------------------------------------
+//Obat Create
+$app->post("/obat/", function (Request $request, Response $response){
+
+    $obat = $request->getParsedBody();
+
+    $sql = "INSERT INTO obat (kode_obat,nama_obat,jenis_obat,satuan,stok,harga) 
+            VALUE (:kode_obat,:nama_obat,:jenis_obat,:satuan,:stok,:harga)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":kode_obat" => $obat["kode_obat"],
+        ":nama_obat" => $obat["nama_obat"],
+        ":jenis_obat" => $obat["jenis_obat"],
+        ":satuan" => $obat["satuan"],
+        ":stok" => $obat["stok"],
+        ":harga" => $obat["harga"],
+    ]; 
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+
+//Obat Read
+$app->get("/obat/", function (Request $request, Response $response){
+    $sql = "SELECT * FROM obat";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
+});
+
+//Obat Update
+$app->put("/obat/update/{id}", function (Request $request, Response $response, $args){
+    $obat = $args["id"];
+    $obat = $request->getParsedBody();
+    $sql = "UPDATE obat SET kode_obat=:kode_obat, nama_obat=:nama_obat, jenis_obat=:jenis_obat, satuan=:satuan, stok=:stok,
+            harga=:harga WHERE kode_obat=:kode_obat";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":kode_obat" => $obat["kode_obat"],
+        ":nama_obat" => $obat["nama_obat"],
+        ":jenis_obat" => $obat["jenis_obat"],
+        ":satuan" => $obat["satuan"],
+        ":stok" => $obat["stok"],
+        ":harga" => $obat["harga"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Obat Delete
+$app->delete("/obat/delete/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "DELETE FROM obat WHERE kode_obat=:kode_obat";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":kode_obat" => $id
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Resep Create
+$app->post("/resep/", function (Request $request, Response $response){
+
+    $resep = $request->getParsedBody();
+
+    $sql = "INSERT INTO resep (id_dokter,no_rm,tgl_transaksi,total_harga) 
+            VALUE (:id_dokter,:no_rm,:tgl_transaksi,:total_harga)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":id_dokter" => $resep["id_dokter"],
+        ":no_rm" => $resep["no_rm"],
+        ":tgl_transaksi" => date("Y-m-d"),
+        ":total_harga" => $resep["total_harga"],
+    ]; 
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Resep Read
+$app->get("/resep/", function (Request $request, Response $response){
+    $sql = "SELECT * FROM resep";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
+});
+
+//Resep Update
+$app->put("/resep/update/{id}", function (Request $request, Response $response, $args){
+    $resep = $args["id"];
+    $resep = $request->getParsedBody();
+    $sql = "UPDATE resep SET id_resep=:id_resep, id_dokter=:id_dokter, no_rm=:no_rm, tgl_transaksi=:tgl_transaksi, total_harga=:total_harga
+            WHERE id_resep=:id_resep";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_resep" => $resep["id_resep"],
+        ":id_dokter" => $resep["id_dokter"],
+        ":no_rm" => $resep["no_rm"],
+        ":tgl_transaksi" => date("Y-m-d"),
+        ":total_harga" => $resep["total_harga"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Resep Delete
+$app->delete("/resep/delete/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "DELETE FROM resep WHERE id_resep=:id_resep";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_resep" => $id
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Create Detil Resep
+$app->post("/detil_resep/", function (Request $request, Response $response){
+
+    $detil_resep = $request->getParsedBody();
+
+    $sql = "INSERT INTO detil_resep (id_resep,kode_obat,harga,jumlah_beli) 
+            VALUE (:id_resep,:kode_obat,:harga,:jumlah_beli)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":id_resep" => $detil_resep["id_resep"],
+        ":kode_obat" => $detil_resep["kode_obat"],
+        ":harga" => $detil_resep["harga"],
+        ":jumlah_beli" => $detil_resep["jumlah_beli"],
+    ]; 
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Read Detil Resep
+$app->get("/detil_resep/", function (Request $request, Response $response){
+    $sql = "SELECT * FROM detil_resep";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
+});
+
+//Update Detil Resep
+$app->put("/detil_resep/update/{id}", function (Request $request, Response $response, $args){
+    $detil_resep = $args["id"];
+    $detil_resep = $request->getParsedBody();
+    $sql = "UPDATE resep SET id_detil_resep=:id_detil_resep, id_resep=:id_resep, kode_obat=:kode_obat, harga=:harga,jumlah_beli=:jumlah_beli
+            WHERE id_detil_resep=:id_detil_resep";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_detil_resep" => $detil_resep["id_detil_resep"],
+        ":id_resep" => $detil_resep["id_resep"],
+        ":kode_obat" => $detil_resep["kode_obat"],
+        ":harga" => $detil_resep["harga"],
+        ":jumlah_beli" => $detil_resep["jumlah_beli"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//Delete Detil Resep
+
+$app->delete("/detil_resep/delete/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "DELETE FROM detil_resep WHERE id_detil_resep=:id_detil_resep";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_detil_resep" => $id
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//
+$app->put("/obat/{id}", function (Request $request, Response $response, $args){
+    $kode_obat = $args["id"];
+    $obat = $request->getParsedBody();
+    $sql = "UPDATE obat SET kode_obat=:kode_obat, nama_obat=:nama_obat, jenis_obat=:jenis_obat, 
+            satuan=:satuan, stok=:stok, harga=:harga 
+            WHERE kode_obat=:kode_obat";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":kode_obat" => $obat["kode_obat"],
+        ":nama_obat" => $obat["nama_obat"],
+        ":jenis_obat" => $obat["jenis_obat"],
+        ":satuan" => $obat["satuan"],
+        ":stok" => $obat["stok"],
+        ":harga" => $obat["harga"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+
+$app->put("/resep/{id}", function (Request $request, Response $response, $args){
+    $id_resep = $args["id"];
+    $resep = $request->getParsedBody();
+    $sql = "UPDATE resep SET kode_obat=:kode_obat, nama_obat=:nama_obat, jenis_obat=:jenis_obat, 
+            satuan=:satuan, stok=:stok, harga=:harga 
+            WHERE kode_obat=:kode_obat";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":kode_obat" => $obat["kode_obat"],
+        ":nama_obat" => $obat["nama_obat"],
+        ":jenis_obat" => $obat["jenis_obat"],
+        ":satuan" => $obat["satuan"],
+        ":stok" => $obat["stok"],
+        ":harga" => $obat["harga"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
 };
