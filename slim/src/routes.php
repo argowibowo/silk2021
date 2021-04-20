@@ -9,6 +9,94 @@ return function (App $app) {
 $container = $app->getContainer();
 
 //----------------------------------------SILK-------------------------------------------
+//pasien
+//CREATE
+$app->post("/pasien/insert/", function (Request $request, Response $response){
+
+    $pasien = $request->getParsedBody();
+
+    $sql = "INSERT INTO pasien (nik,nama_lengkap,tgl_lahir,jns_kelamin,
+            alamat,kelurahan,kabupaten,provinsi,warga_negara,status_nikah,no_telp,tgl_daftar) 
+            VALUE (:nik,:nama_lengkap,:tgl_lahir,:jns_kelamin,
+            :alamat,:kelurahan,:kabupaten,:provinsi,:warga_negara,:status_nikah,:no_telp,:tgl_daftar)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":nik" => $pasien["nik"],
+        ":nama_lengkap" => $pasien["nama_lengkap"],
+        ":tgl_lahir" => $pasien["tgl_lahir"],
+        ":jns_kelamin" => $pasien["jns_kelamin"],
+        ":alamat" => $pasien["alamat"],
+        ":kelurahan" => $pasien["kelurahan"],
+        ":kabupaten" => $pasien["kabupaten"],
+        ":provinsi" => $pasien["provinsi"],
+        ":warga_negara" => $pasien["warga_negara"],
+        ":status_nikah" => $pasien["status_nikah"],
+        ":no_telp" => $pasien["no_telp"],
+        ":tgl_daftar" => date("Y-m-d"),
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1", "no_rm" => $this->db->lastInsertId()], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//READ
+$app->get("/pasien/", function (Request $request, Response $response){
+    $sql = "SELECT * FROM pasien";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson(["status" => "success", "data" => $result], 200);
+});
+
+//UPDATE
+$app->put("/pasien/update/{id}", function (Request $request, Response $response, $args){
+    $product_id = $args["id"];
+    $new_buah = $request->getParsedBody();
+    $sql = "UPDATE pasien SET nik=:nik, nama_lengkap=:nama_lengkap, tgl_lahir=:tgl_lahir, jns_kelamin=:jns_kelamin, alamat=:alamat,
+            kelurahan=:kelurahan, kabupaten=:kabupaten, provinsi=:provinsi, warga_negara=:warga_negara,
+            status_nikah=:status_nikah, no_telp=:no_telp, tgl_daftar=:tgl_daftar WHERE no_rm=:no_rm";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":nik" => $pasien["nik"],
+        ":nama_lengkap" => $pasien["nama_lengkap"],
+        ":tgl_lahir" => $pasien["tgl_lahir"],
+        ":jns_kelamin" => $pasien["jns_kelamin"],
+        ":alamat" => $pasien["alamat"],
+        ":kelurahan" => $pasien["kelurahan"],
+        ":kabupaten" => $pasien["kabupaten"],
+        ":provinsi" => $pasien["provinsi"],
+        ":warga_negara" => $pasien["warga_negara"],
+        ":status_nikah" => $pasien["status_nikah"],
+        ":no_telp" => $pasien["no_telp"],
+        ":tgl_daftar" => date("Y-m-d"),
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//DELETE
+$app->delete("/pasien/delete/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "DELETE FROM pasien WHERE no_rm=:no_rm";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":no_rm" => $id
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["status" => "success", "data" => "1"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
 
 // PETUGAS
 // GET
