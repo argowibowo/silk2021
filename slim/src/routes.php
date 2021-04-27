@@ -85,14 +85,16 @@ $app->get("rekammds/search/", function (Request $request, Response $response, $a
 
 $app->put("/rekammds/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
+    $no_rm = $args["id"];
     $rekammds = $request->getParsedBody();
-    $sql = "UPDATE rekammds SET  keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, 
+    $sql = "UPDATE rekammds SET keluhan=:keluhan, id_dokter=:id_dokter, diagnosa=:diagnosa, 
     id_unit=:id_unit, tgl_periksa=:tgl_periksa, id_resep=:id_resep
     WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
 
     $data = [
         ":no_rm" => $id,
+        ":no_rm" => $no_rm,
         ":keluhan" => $rekammds["keluhan"],
         ":id_dokter" => $rekammds["id_dokter"],
         ":diagnosa" => $rekammds["diagnosa"],
