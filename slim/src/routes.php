@@ -408,6 +408,7 @@ $app->get("/obat/", function (Request $request, Response $response){
 
 //Obat Update
 $app->put("/obat/update/{id}", function (Request $request, Response $response, $args){
+    $obat_id;
     $obat = $args["id"];
     $obat = $request->getParsedBody();
     $sql = "UPDATE obat SET kode_obat=:kode_obat, nama_obat=:nama_obat, jenis_obat=:jenis_obat, satuan=:satuan, stok=:stok,
@@ -415,7 +416,7 @@ $app->put("/obat/update/{id}", function (Request $request, Response $response, $
     $stmt = $this->db->prepare($sql);
     
     $data = [
-        ":kode_obat" => $obat["kode_obat"],
+        ":kode_obat" => $obat_id,
         ":nama_obat" => $obat["nama_obat"],
         ":jenis_obat" => $obat["jenis_obat"],
         ":satuan" => $obat["satuan"],
@@ -478,6 +479,7 @@ $app->get("/resep/", function (Request $request, Response $response){
 
 //Resep Update
 $app->put("/resep/update/{id}", function (Request $request, Response $response, $args){
+    $resep_id;
     $resep = $args["id"];
     $resep = $request->getParsedBody();
     $sql = "UPDATE resep SET id_resep=:id_resep, id_dokter=:id_dokter, no_rm=:no_rm, tgl_transaksi=:tgl_transaksi, total_harga=:total_harga
@@ -485,7 +487,7 @@ $app->put("/resep/update/{id}", function (Request $request, Response $response, 
     $stmt = $this->db->prepare($sql);
     
     $data = [
-        ":id_resep" => $resep["id_resep"],
+        ":id_resep" => $resep_id,
         ":id_dokter" => $resep["id_dokter"],
         ":no_rm" => $resep["no_rm"],
         ":tgl_transaksi" => date("Y-m-d"),
@@ -547,6 +549,7 @@ $app->get("/detil_resep/", function (Request $request, Response $response){
 
 //Update Detil Resep
 $app->put("/detil_resep/update/{id}", function (Request $request, Response $response, $args){
+    $detil_resep_id;
     $detil_resep = $args["id"];
     $detil_resep = $request->getParsedBody();
     $sql = "UPDATE resep SET id_detil_resep=:id_detil_resep, id_resep=:id_resep, kode_obat=:kode_obat, harga=:harga,jumlah_beli=:jumlah_beli
@@ -554,7 +557,7 @@ $app->put("/detil_resep/update/{id}", function (Request $request, Response $resp
     $stmt = $this->db->prepare($sql);
     
     $data = [
-        ":id_detil_resep" => $detil_resep["id_detil_resep"],
+        ":id_detil_resep" => $detil_resep_id,
         ":id_resep" => $detil_resep["id_resep"],
         ":kode_obat" => $detil_resep["kode_obat"],
         ":harga" => $detil_resep["harga"],
