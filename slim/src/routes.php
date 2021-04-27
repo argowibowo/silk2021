@@ -11,7 +11,7 @@ $container = $app->getContainer();
 //----------------------------------------SILK-------------------------------------------
 //pasien
 //CREATE
-$app->post("/pasien/insert/", function (Request $request, Response $response){
+$app->post("/pasien/", function (Request $request, Response $response){
 
     $pasien = $request->getParsedBody();
 
@@ -52,15 +52,16 @@ $app->get("/pasien/", function (Request $request, Response $response){
 });
 
 //UPDATE
-$app->put("/pasien/update/{id}", function (Request $request, Response $response, $args){
-    $product_id = $args["id"];
-    $new_buah = $request->getParsedBody();
+$app->put("/pasien/{id}", function (Request $request, Response $response, $args){
+    $pasien_id = $args["id"];
+    $pasien = $request->getParsedBody();
     $sql = "UPDATE pasien SET nik=:nik, nama_lengkap=:nama_lengkap, tgl_lahir=:tgl_lahir, jns_kelamin=:jns_kelamin, alamat=:alamat,
             kelurahan=:kelurahan, kabupaten=:kabupaten, provinsi=:provinsi, warga_negara=:warga_negara,
-            status_nikah=:status_nikah, no_telp=:no_telp, tgl_daftar=:tgl_daftar WHERE no_rm=:no_rm";
+            status_nikah=:status_nikah, tgl_daftar=:tgl_daftar, no_telp=:no_telp WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
     
     $data = [
+        ":no_rm" => $pasien_id,
         ":nik" => $pasien["nik"],
         ":nama_lengkap" => $pasien["nama_lengkap"],
         ":tgl_lahir" => $pasien["tgl_lahir"],
@@ -82,7 +83,7 @@ $app->put("/pasien/update/{id}", function (Request $request, Response $response,
 });
 
 //DELETE
-$app->delete("/pasien/delete/{id}", function (Request $request, Response $response, $args){
+$app->delete("/pasien/{id}", function (Request $request, Response $response, $args){
     $id = $args["id"];
     $sql = "DELETE FROM pasien WHERE no_rm=:no_rm";
     $stmt = $this->db->prepare($sql);
