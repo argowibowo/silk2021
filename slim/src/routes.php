@@ -164,13 +164,13 @@ $app->delete("/petugas/{id}", function (Request $request, Response $response, $a
 
 // PUT
 $app->put("/petugas/{id}", function (Request $request, Response $response, $args){
-    $id = $args["id"];
+    $nik = $args["id"];
     $petugas = $request->getParsedBody();
-    $sql = "UPDATE petugas SET nama=:nama, tgl_lahir=:tgl_lahir, jenis_kelamin=:jenis_kelamin, alamat=:alamat, no_telp=:no_telp WHERE nik=:nik";
+    $sql = "UPDATE petugas SET nama=:nama, tgl_lahir=:tgl_lahir, jenis_kelamin=:jenis_kelamin, alamat=:alamat, no_telp=:no_telp WHERE petugas.nik=:nik";
     $stmt = $this->db->prepare($sql);
     
     $data = [
-        ":nik" => $id,
+        ":nik" => $nik,
         ":nama" => $petugas["nama"],
         ":tgl_lahir" => $petugas["tgl_lahir"],
         ":jenis_kelamin" => $petugas["jenis_kelamin"],
@@ -180,6 +180,82 @@ $app->put("/petugas/{id}", function (Request $request, Response $response, $args
 
     if($stmt->execute($data))
         return $response->withJson(["petugas updated succesfully"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//------------------------------UNIT---------------------------------
+$app->get("/unit/", function (Request $request, Response $response){
+    $sql = "SELECT * FROM unit";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $response->withJson($result, 200);
+});
+
+// GET by id
+$app->get("/unit/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "SELECT * FROM unit where id_unit=:id_unit";
+    $stmt = $this->db->prepare($sql);
+    $data = [
+        ":id_unit" => $id
+    ];
+    $stmt->execute($data);
+    $result = $stmt->fetchAll();
+    return $response->withJson($result, 200);
+});
+
+// POST
+$app->post("/unit/", function (Request $request, Response $response){
+
+    $unit = $request->getParsedBody();
+
+    $sql = "INSERT INTO unit (id_unit, nama_unit) 
+            VALUE (:id_unit, :nama_unit)";
+    $stmt = $this->db->prepare($sql);
+
+    $data = [
+        ":id_unit" => $unit["id_unit"],
+        ":nama_unit" => $unit["nama_unit"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["unit created succesfully"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+// DELETE
+$app->delete("/unit/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $sql = "DELETE FROM unit WHERE id_unit=:id_unit";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_unit" => $id
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["unit deleted successfully"], 200);
+    
+    return $response->withJson(["status" => "failed", "data" => "0"], 200);
+});
+
+//PUT
+$app->put("/unit/{id}", function (Request $request, Response $response, $args){
+    $id = $args["id"];
+    $unit = $request->getParsedBody();
+    $sql = "UPDATE unit SET nama_unit=:nama_unit WHERE unit.id_unit=:id_unit";
+    $stmt = $this->db->prepare($sql);
+    
+    $data = [
+        ":id_unit" => $id,
+        ":nama_unit" => $unit["nama_unit"],
+    ];
+
+    if($stmt->execute($data))
+        return $response->withJson(["unit updated succesfully"], 200);
     
     return $response->withJson(["status" => "failed", "data" => "0"], 200);
 });
