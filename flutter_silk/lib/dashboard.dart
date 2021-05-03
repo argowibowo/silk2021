@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_silk/pendaftaran.dart';
 
 
 class dashboard extends StatefulWidget {  //<~~~
@@ -43,7 +44,13 @@ class _dashboardState extends State<dashboard> {    //<~~
               title: Text("Pendaftaran"),    //<~~~~
               trailing: Icon(Icons.add_box),   //<~~~
               subtitle: Text("Menu Pendaftaran"),  //<~~
-
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Pendaftaran(title: "PENDAFTARAN")),  //<~~
+                );
+              },
             ),
             ListTile(
               title: Text("Rawat Jalan"),   //<~~~
