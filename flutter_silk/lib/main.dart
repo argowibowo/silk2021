@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_silk/dashboard.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter SILK'),
+      home: dashboard(),
     );
   }
 }
