@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class Pendaftaran extends StatefulWidget {
-  Pendaftaran({Key key, this.title}) : super(key: key);
+class Pendaftaran1 extends StatefulWidget {
+  Pendaftaran1({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _PendaftaranState createState() => _PendaftaranState();
+  _Pendaftaran1State createState() => _Pendaftaran1State();
 }
 
-class _PendaftaranState extends State<Pendaftaran> {
+class _Pendaftaran1State extends State<Pendaftaran1> {
   int _counter = 0;
 
   void _incrementCounter() {

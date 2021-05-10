@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_silk/pendaftaran.dart';
+import 'file:///D:/ProgWeb/xaamp/htdocs/SILK2020/flutter_silk/lib/Pendaftaran/pendaftaran.dart';
+import 'package:flutter_silk/Pendaftaran/pendaftaran2.dart';
 
 
 class dashboard extends StatefulWidget {  //<~~~
@@ -48,7 +49,7 @@ class _dashboardState extends State<dashboard> {    //<~~
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Pendaftaran(title: "PENDAFTARAN")),  //<~~
+                  MaterialPageRoute(builder: (context) => Pendaftaran2(title: "PENDAFTARAN")),  //<~~
                 );
               },
             ),
