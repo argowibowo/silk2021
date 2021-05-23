@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -15,6 +16,27 @@ class _AddObatState extends State<AddObat> {
   final String title;
   _AddObatState(this.title);
   bool isLoading = false;
+
+  TextEditingController controllerKode = new TextEditingController();
+  TextEditingController controllerNama = new TextEditingController();
+  TextEditingController controllerJenis = new TextEditingController();
+  TextEditingController controllerSatuan = new TextEditingController();
+  TextEditingController controllerStok = new TextEditingController();
+  TextEditingController controllerHarga = new TextEditingController();
+
+  void addobat(){
+    var url ="http://10.0.2.2/silk2021/flutter_silk/lib/Farmasi/crud/addobat.php";
+
+    http.post(url, body: {
+      "kode_obat": controllerKode.text,
+      "nama_obat": controllerNama.text,
+      "jenis_obat": controllerJenis.text,
+      "satuan": controllerSatuan.text,
+      "stok": controllerStok.text,
+      "harga": controllerHarga.text
+    });
+
+  }
 
   @override
   void initState() {
@@ -42,76 +64,69 @@ class _AddObatState extends State<AddObat> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerKode,
                       decoration: InputDecoration(
                           labelText: "Kode Obat",
                           hintText: "Kode Obat",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerNama,
                       decoration: InputDecoration(
                           labelText: "Nama Obat",
                           hintText: "Nama Obat",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerJenis,
                       decoration: InputDecoration(
                           labelText: "Jenis Obat",
                           hintText: "Jenis Obat",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerSatuan,
                       decoration: InputDecoration(
                           labelText: "Satuan",
                           hintText: "Satuan",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerStok,
                       decoration: InputDecoration(
                           labelText: "Stok",
                           hintText: "Stok Obat",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    // Ternary Operation -> objek ? true : false atau else
                     TextFormField(
+                      controller: controllerHarga,
                       decoration: InputDecoration(
                           labelText: "Harga",
                           hintText: "Harga Obat",
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
                     ),
                     SizedBox(
                       height: 15,
@@ -129,10 +144,13 @@ class _AddObatState extends State<AddObat> {
                               content: Text("Apakah Anda akan menyimpan data ini?"),
                               actions: <Widget>[
                                 FlatButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                    child: Text("Ya")
+                                    child: Text("Ya"),
+                                    onPressed: () {
+                                      addobat();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+
                                 ),
                                 FlatButton(
                                     onPressed: () {

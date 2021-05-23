@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/ProgWeb/xaamp/htdocs/SILK2020/flutter_silk/lib/Pendaftaran/pendaftaran.dart';
+import 'package:flutter_silk/Farmasi/dbFarmasi.dart';
+//import 'file:///D:/ProgWeb/xaamp/htdocs/SILK2020/flutter_silk/lib/Pendaftaran/pendaftaran.dart';
 import 'package:flutter_silk/Pendaftaran/pendaftaran2.dart';
 
 
@@ -64,7 +65,13 @@ class _dashboardState extends State<dashboard> {    //<~~
               title: Text("Farmasi"),  //<~~~
               trailing: Icon(Icons.format_align_center_rounded),  //<~~~
               subtitle: Text("Menu Farmasi"),  //<~~~
-
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => dbFarmasi(title: "DASHBOARD Farmasi")),  //<~~~
+                );
+              },
             ),
             ListTile(
               title: Text("Rekam Medis"),    //<~~~

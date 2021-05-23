@@ -1,175 +1,115 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_silk/Farmasi/Obat/dbObat.dart';
+import 'package:flutter_silk/Farmasi/Resep/dbResep.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateObat extends StatefulWidget {
+  final List list;
+  final int index;
   final String title;
 
-  UpdateObat({Key key, @required this.title}) : super(key: key);
+  UpdateObat({Key key, @required this.title, this.list, this.index});
 
   @override
-  _UpdateObatState createState() => _UpdateObatState(title);
+  _UpdateObatState createState() => _UpdateObatState();
 }
 
 class _UpdateObatState extends State<UpdateObat> {
-  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
-  final String title;
-  bool isLoading = false;
 
-  _UpdateObatState(this.title);
+  TextEditingController controllerKode;
+  TextEditingController controllerNama;
+  TextEditingController controllerJenis;
+  TextEditingController controllerStok;
+  TextEditingController controllerSatuan;
+  TextEditingController controllerHarga;
+
+  void editobat(){
+    var url="http://10.0.2.2/silk2021/flutter_silk/lib/Farmasi/crud/editobat.php";
+    http.post(url,body: {
+      "kode_obat": widget.list[widget.index]['kode_obat'],
+      "nama_obat": controllerNama.text,
+      "jenis_obat": controllerJenis.text,
+      "stok": controllerStok.text,
+      "satuan": controllerSatuan.text,
+      "harga": controllerHarga.text
+    });
+  }
 
   @override
   void initState() {
+    controllerNama = new TextEditingController(text: widget.list[widget.index]['nama_obat']);
+    controllerJenis = new TextEditingController(text: widget.list[widget.index]['jenis_obat']);
+    controllerStok = new TextEditingController(text: widget.list[widget.index]['stok']);
+    controllerSatuan = new TextEditingController(text: widget.list[widget.index]['satuan']);
+    controllerHarga = new TextEditingController(text: widget.list[widget.index]['harga']);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: Colors.brown,
-      ),
-      backgroundColor: Colors.blueGrey,
-
-      body: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-        child: SingleChildScrollView(
-          child: Stack(
+    return new Scaffold(
+      appBar: new AppBar(title: new Text("Edit Obat"),),
+      body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: new ListView(
             children: <Widget>[
-              Form(
-                key: _formState,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Kode Obat",
-                          hintText: "Kode Obat",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Nama Obat",
-                          hintText: "Nama Obat",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Jenis",
-                          hintText: "Jenis Obat",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Satuan",
-                          hintText: "Satuan",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Stok",
-                          hintText: "Stok Obat",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // Ternary Operation -> objek ? true : false atau else
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Harga",
-                          hintText: "Harga Obat",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                      color: Colors.blue,
-                      onPressed: () {
-                        return showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text("Ubah Data"),
-                              content: Text("Apakah Anda akan menyimpan data ini?"),
-                              actions: <Widget>[
-                                FlatButton(
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Ya")
-                                ),
-                                FlatButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("Tidak")
-                                )
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Simpan",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              ),
-              // Center(
-              //   child: CircularProgressIndicator(),
-              // )
-              isLoading
-                  ? Stack(
+              Column(
                 children: <Widget>[
-                  // Opacity(
-                  //   opacity: 0.3,
-                  //   child: ModalBarrier(
-                  //     dismissible: false,
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
-                  Center(
-                    child: CircularProgressIndicator(),
+                  new TextField(
+                    controller: controllerNama,
+                    decoration: new InputDecoration(
+                        hintText: "OBT123",
+                        labelText: "Nama Obat"
+                    ),
+                  ),
+                  new TextField(
+                    controller: controllerJenis,
+                    decoration: new InputDecoration(
+                        hintText: "Tablet",
+                        labelText: "Jenis Obat"
+                    ),
+                  ),
+                  new TextField(
+                    controller: controllerSatuan,
+                    decoration: new InputDecoration(
+                        hintText: "Kapsul",
+                        labelText: "Satuan"
+                    ),
+                  ),
+                  new TextField(
+                    controller: controllerStok,
+                    decoration: new InputDecoration(
+                        hintText: "5",
+                        labelText: "Stok"
+                    ),
+                  ),
+                  new Padding(padding: const EdgeInsets.all(10.0)
+                  ),
+                  new TextField(
+                    controller: controllerHarga,
+                    decoration: new InputDecoration(
+                        hintText: "Rp. 5.000",
+                        labelText: "Harga"
+                    ),
+                  ),
+                  new Padding(padding: const EdgeInsets.all(10.0)
+                  ),
+                  new RaisedButton(
+                    child: new Text("Simpan"),
+                    color: Colors.blueAccent,
+                    onPressed: () {
+                      editobat();
+                      Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context)=> new dbObat(title: "Obat")
+                          )
+                      );
+                    },
                   )
                 ],
-              )
-                  : Container(),
+              ),
             ],
-          ),
-        ),
+          )
       ),
     );
   }

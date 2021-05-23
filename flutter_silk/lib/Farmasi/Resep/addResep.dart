@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -15,6 +16,23 @@ class _AddResepState extends State<AddResep> {
   final String title;
   _AddResepState(this.title);
   bool isLoading = false;
+
+  TextEditingController controllerIdDokter = new TextEditingController();
+  TextEditingController controllerNo = new TextEditingController();
+  TextEditingController controllerTgl = new TextEditingController();
+  TextEditingController controllerTotal = new TextEditingController();
+
+  void addresep(){
+    var url ="http://10.0.2.2/silk2021/flutter_silk/lib/Farmasi/crud/addresep.php";
+
+    http.post(url, body: {
+      "id_dokter": controllerIdDokter.text,
+      "no_rm": controllerNo.text,
+      "tgl_transaksi": controllerTgl.text,
+      "total_harga": controllerTotal.text
+    });
+
+  }
 
   @override
   void initState() {
@@ -42,6 +60,7 @@ class _AddResepState extends State<AddResep> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerIdDokter,
                       decoration: InputDecoration(
                           labelText: "ID Dokter",
                           hintText: "334455",
@@ -54,6 +73,7 @@ class _AddResepState extends State<AddResep> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerNo,
                       decoration: InputDecoration(
                           labelText: "No RM",
                           hintText: "123",
@@ -66,6 +86,7 @@ class _AddResepState extends State<AddResep> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerTgl,
                       decoration: InputDecoration(
                           labelText: "Tanggal Transaksi",
                           hintText: "01-01-2021",
@@ -78,6 +99,7 @@ class _AddResepState extends State<AddResep> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerTotal,
                       decoration: InputDecoration(
                           labelText: "Total Harga",
                           hintText: "Rp. 10.000",
@@ -104,6 +126,8 @@ class _AddResepState extends State<AddResep> {
                               actions: <Widget>[
                                 FlatButton(
                                     onPressed: () {
+                                      addresep();
+                                      Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
                                     child: Text("Ya")

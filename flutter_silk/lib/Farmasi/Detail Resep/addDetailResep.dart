@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -13,8 +14,26 @@ class AddDetailResep extends StatefulWidget {
 class _AddDetailResepState extends State<AddDetailResep> {
   final GlobalKey<FormState> _formState = GlobalKey<FormState>();
   final String title;
+
   _AddDetailResepState(this.title);
+
   bool isLoading = false;
+
+  TextEditingController controllerIdResep = new TextEditingController();
+  TextEditingController controllerKode = new TextEditingController();
+  TextEditingController controllerHarga = new TextEditingController();
+  TextEditingController controllerJumlah = new TextEditingController();
+
+  void adddetail() {
+    var url = "http://10.0.2.2/silk2021/flutter_silk/lib/Farmasi/crud/adddetail.php";
+
+    http.post(url, body: {
+      "id_resep": controllerIdResep.text,
+      "kode_obat": controllerKode.text,
+      "harga": controllerHarga.text,
+      "jumlah_beli": controllerJumlah.text
+    });
+  }
 
   @override
   void initState() {
@@ -42,55 +61,61 @@ class _AddDetailResepState extends State<AddDetailResep> {
                     SizedBox(height: 15,
                     ),
                     TextFormField(
+                      controller: controllerIdResep,
                       decoration: InputDecoration(
-                          labelText: "ID Dokter",
-                          hintText: "334455",
+                          labelText: "ID RESEP",
+                          hintText: "5555",
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
+                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0,
+                              20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
+                      onSaved: (String value) {},
+                    ),
+                    SizedBox(height: 15,
+                    ),
+                    TextFormField(
+                      controller: controllerKode,
+                      decoration: InputDecoration(
+                          labelText: "Kode Obat",
+                          hintText: "1234",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0,
+                              20.0, 15.0)
+                      ),
+                      onSaved: (String value) {},
+                    ),
+                    SizedBox(height: 15,
+                    ),
+                    TextFormField(
+                      controller: controllerHarga,
+                      decoration: InputDecoration(
+                          labelText: "Harga",
+                          hintText: "Rp. 5000",
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0,
+                              20.0, 15.0)
+                      ),
+                      onSaved: (String value) {},
                     ),
                     SizedBox(height: 15,
                     ),
                     TextFormField(
                       decoration: InputDecoration(
-                          labelText: "No RM",
-                          hintText: "123",
+                          labelText: "Jumlah Beli",
+                          hintText: "3",
                           border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
+                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0,
+                              20.0, 15.0)
                       ),
-                      onSaved: (String value) {
-                      },
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Tanggal Transaksi",
-                          hintText: "01-01-2021",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                      onSaved: (String value) {
-                      },
-                    ),
-                    SizedBox(height: 15,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: "Total Harga",
-                          hintText: "Rp. 10.000",
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                      ),
-                      onSaved: (String value) {
-                      },
+                      onSaved: (String value) {},
                     ),
                     SizedBox(height: 15,
                     ),
                     MaterialButton(
-                      minWidth: MediaQuery.of(context).size.width,
+                      minWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width,
                       padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                       color: Colors.blue,
                       onPressed: () {
@@ -99,10 +124,13 @@ class _AddDetailResepState extends State<AddDetailResep> {
                           builder: (context) {
                             return AlertDialog(
                               title: Text("Simpan Data"),
-                              content: Text("Apakah Anda akan menyimpan data ini?"),
+                              content: Text(
+                                  "Apakah Anda akan menyimpan data ini?"),
                               actions: <Widget>[
                                 FlatButton(
                                     onPressed: () {
+                                      adddetail();
+                                      Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
                                     child: Text("Ya")
