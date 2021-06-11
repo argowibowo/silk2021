@@ -32,16 +32,6 @@ class _Pendaftaran2State extends State<Pendaftaran2> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: "Cari NIK Pasien",
-                      hintText: "Masukkan NIK",
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
-                  ),
-                ),
-                SizedBox(height: 5,
-                ),
                 MaterialButton(
                   minWidth: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -55,7 +45,7 @@ class _Pendaftaran2State extends State<Pendaftaran2> {
 
                   },
                   child: Text(
-                    "CARI",
+                    "CARI NIK PASIEN",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -86,7 +76,7 @@ class _Pendaftaran2State extends State<Pendaftaran2> {
                     ),
                   ),
                 ),
-                SizedBox(height: 400,
+                SizedBox(height: 5,
                 ),
                 MaterialButton(
                   minWidth: MediaQuery.of(context).size.width,

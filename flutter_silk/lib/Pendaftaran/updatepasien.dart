@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_silk/Pendaftaran/listpasien.dart';
 import 'package:http/http.dart' as http;
 
-final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+class updatepasien extends StatefulWidget {
+  final List list;
+  final int index;
 
-class Pendaftaran1 extends StatefulWidget {
-  Pendaftaran1({Key key, this.title}) : super(key: key);
+  updatepasien({Key key, this.title, this.list, this.index}) : super(key: key);
 
   final String title;
 
   @override
-  _Pendaftaran1State createState() => _Pendaftaran1State(title);
+  _updatepasienState createState() => _updatepasienState();
 }
 
-class _Pendaftaran1State extends State<Pendaftaran1> {
-  final GlobalKey<FormState> _formState = GlobalKey<FormState>();
-  final String title;
-  var url = "http://192.168.1.7/silk2020/slim/public/pasien/";
+class _updatepasienState extends State<updatepasien> {
 
-  _Pendaftaran1State(this.title);
+  TextEditingController conNik;
+  TextEditingController conNama;
+  TextEditingController conTglLahir;
+  TextEditingController conJk;
+  TextEditingController conAlamat;
+  TextEditingController conKel;
+  TextEditingController conKab;
+  TextEditingController conProp;
+  TextEditingController conWn;
+  TextEditingController conStat;
+  TextEditingController conNotelp;
+  TextEditingController conTglDaf;
 
-  bool isLoading = false;
 
-  TextEditingController conNik = new TextEditingController();
-  TextEditingController conNama = new TextEditingController();
-  TextEditingController conTglLahir = new TextEditingController();
-  TextEditingController conJk = new TextEditingController();
-  TextEditingController conAlamat = new TextEditingController();
-  TextEditingController conKel = new TextEditingController();
-  TextEditingController conKab = new TextEditingController();
-  TextEditingController conProp = new TextEditingController();
-  TextEditingController conWn = new TextEditingController();
-  TextEditingController conStat = new TextEditingController();
-  TextEditingController conNotelp = new TextEditingController();
-
-  void addPasien() {
-
+  void editpasien() {
+    var url="http://192.168.1.7/silk2021/flutter_silk/lib/Farmasi/crud/editpasien.php";
     http.post(url, body: {
+      "no_rm": widget.list[widget.index]['no_rm'],
       "nik": conNik.text,
       "nama_lengkap": conNama.text,
       "tgl_lahir": conTglLahir.text,
@@ -46,16 +44,27 @@ class _Pendaftaran1State extends State<Pendaftaran1> {
       "provinsi":conProp.text,
       "warga_negara":conWn.text,
       "status_nikah": conStat.text,
-      "no_telp": conNotelp.text
+      "no_telp": conNotelp.text,
+      "tgl_daftar": widget.list[widget.index]['no_rm']
 
     });
   }
 
   @override
-  void initState() {
+  void initState(){
+    conNik = new TextEditingController(text: widget.list[widget.index]['nik']);
+    conNama = new TextEditingController(text: widget.list[widget.index]['nama_lengkap']);
+    conTglLahir = new TextEditingController(text: widget.list[widget.index]['tgl_lahir']);
+    conJk = new TextEditingController(text: widget.list[widget.index]['jns_kelamin']);
+    conAlamat = new TextEditingController(text: widget.list[widget.index]['alamat']);
+    conKel = new TextEditingController(text: widget.list[widget.index]['kelurahan']);
+    conKab = new TextEditingController(text: widget.list[widget.index]['kabupaten']);
+    conProp = new TextEditingController(text: widget.list[widget.index]['provinsi']);
+    conWn = new TextEditingController(text: widget.list[widget.index]['warga_negara']);
+    conStat = new TextEditingController(text: widget.list[widget.index]['status_nikah']);
+    conNotelp = new TextEditingController(text: widget.list[widget.index]['no_telp']);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +77,8 @@ class _Pendaftaran1State extends State<Pendaftaran1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 10,
+                ),
                 TextFormField(
                   controller: conNik,
                   decoration: InputDecoration(
@@ -187,9 +198,9 @@ class _Pendaftaran1State extends State<Pendaftaran1> {
                       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0)
                   ),
                 ),
-            SizedBox(
-              height: 15,
-            ),
+                SizedBox(
+                  height: 15,
+                ),
                 MaterialButton(
                   minWidth: MediaQuery
                       .of(context)
@@ -208,9 +219,12 @@ class _Pendaftaran1State extends State<Pendaftaran1> {
                           actions: <Widget>[
                             FlatButton(
                                 onPressed: () {
-                                  addPasien();
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  editpasien();
+                                  Navigator.of(context).push(
+                                      new MaterialPageRoute(
+                                          builder: (BuildContext context)=> listpasien(title: "List Pasien")
+                                      )
+                                  );
                                 },
                                 child: Text("Ya")
                             ),

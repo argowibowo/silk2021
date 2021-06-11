@@ -51,6 +51,19 @@ $app->get("/pasien/", function (Request $request, Response $response){
     return $response->withJson(["status" => "success", "data" => $result], 200);
 });
 
+// READ by id
+$app->get("/pasien/{id}", function (Request $request, Response $response, $args){
+    $pasien_id = $args["id"];
+    $sql = "SELECT * FROM pasien where nik=:nik";
+    $stmt = $this->db->prepare($sql);
+    $data = [
+        ":nik" => $pasien_id
+    ];
+    $stmt->execute($data);
+    $result = $stmt->fetchAll();
+    return $response->withJson($result, 200);
+});
+
 //UPDATE
 $app->put("/pasien/{id}", function (Request $request, Response $response, $args){
     $pasien_id = $args["id"];

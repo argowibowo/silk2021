@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter_silk/Farmasi/Detail%20Resep/addDetailResep.dart';
-import 'package:flutter_silk/Farmasi/Detail%20Resep/updateDetailResep.dart';
-import 'package:flutter_silk/Farmasi/Obat/addObat.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_silk/Farmasi/Obat/updateObat.dart';
+import 'package:flutter_silk/Pendaftaran/updatepasien.dart';
 import 'package:http/http.dart' as http;
 
 class listpasien extends StatefulWidget {
@@ -23,16 +20,17 @@ class _listpasienState extends State<listpasien> {
   final _formKey = GlobalKey<FormState>();
 
   Future<List> getData() async{
-    final response= await http.get("http://192.168.1.3/silk2020/slim/public/pasien/");
+    final response= await http.get("http://192.168.1.7/silk2020/flutter_silk/lib/Farmasi/crud/getpasien.php");
     return jsonDecode(response.body);
   }
 
-  void deleteobat(){
-    var url="http://10.0.2.2/silk2021/flutter_silk/lib/Farmasi/crud/deleteobat.php";
+  void deletepasien(){
+    var url = "http://192.168.1.7/silk2020/flutter_silk/lib/Farmasi/crud/deletepasien.php";
     http.post(url, body: {
-      'kode_obat': widget.list[widget.index]['kode_obat']
+      'no_rm': widget.list[widget.index]['no_rm']
     });
   }
+
 
   FutureOr onGoBack(dynamic value) {
     setState(() {
@@ -46,15 +44,6 @@ class _listpasienState extends State<listpasien> {
         title: Text(widget.title),
         backgroundColor: Colors.blue,
         actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.add),
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddDetailResep(title: "Input Detail Resep"))
-                ).then(onGoBack);
-              }
-          ),
         ],
       ),
       body: new FutureBuilder<List>(
@@ -76,6 +65,7 @@ class ItemList extends StatelessWidget{
   final List list;
   ItemList({this.list});
 
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
@@ -84,9 +74,9 @@ class ItemList extends StatelessWidget{
           return new Container(
             child: new Card(
               child: new ListTile(
-                title: new Text("ID Detail Resep : ${list[i]['nik'] + " || ID Resep : ${list[i]['nama_lengkap']}"}"),
-                leading: new Icon(Icons.widgets),
-                subtitle: new Text("Kode Obat : ${list[i]['tgl_lahir'] + " || Harga : ${list[i]['jns_kelamin'] + " || Jumlah Beli : ${list[i]['alamat']}"}"}"),
+                title: new Text("NO RM : ${list[i]['no_rm'] + " || NIK : ${list[i]['nik']}"}"),
+                leading: new Icon(Icons.people_alt),
+                subtitle: new Text("Nama Pasien : ${list[i]['nama_lengkap']}"),
                 onLongPress: (){
                   showDialog(
                       context: context,
@@ -95,28 +85,25 @@ class ItemList extends StatelessWidget{
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             FlatButton(
-                              child: Text("Update"),
+                              child: Text("UBAH DATA"),
                               onPressed: () {
                                 Navigator.pop(context);
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => UpdateDetail(title: "Update Detail Resep", list: list, index: i,)
+                                  MaterialPageRoute(builder: (context) => updatepasien(title: "Update Pasien", list: list, index: i,)
                                   ),
-                                );//.then(onGoBack);
+                                );
                               },
                             ),
                             Divider(
                               color: Colors.black,
-                              height: 20,
+                              height: 5,
                             ),
                             FlatButton(
-                              child: Text("Delete"),
+                              child: Text("HAPUS DATA"),
                               onPressed: () {
-                                //deleteo
-                                //delData();
-                                // ApiServices().deleteObt(listObat[position].kode_obat);
-                                // Navigator.pop(context);
-                                // setState(() {});
+                                Navigator.pop(context);
+
                               },
                             )
                           ],
@@ -130,4 +117,5 @@ class ItemList extends StatelessWidget{
         }
     );
   }
+
 }
